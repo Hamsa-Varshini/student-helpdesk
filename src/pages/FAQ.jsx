@@ -118,24 +118,6 @@ function FAQ() {
             className="faq-search-input"
           />
 
-          <div className="faq-quick-topics">
-            <span className="faq-quick-label">Quick topics:</span>
-            {quickTopics.map((topic) => {
-              const active =
-                selectedCategory === topic.category &&
-                search === topic.search;
-              return (
-                <button
-                  key={topic.label}
-                  onClick={() => applyQuickTopic(topic)}
-                  className={`faq-quick-chip${active ? " active" : ""}`}
-                >
-                  {topic.label}
-                </button>
-              );
-            })}
-          </div>
-
           <div className="faq-category-list">
             {categories.map((category) => {
               const active = selectedCategory === category;
