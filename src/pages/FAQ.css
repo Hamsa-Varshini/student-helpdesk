@@ -67,6 +67,47 @@
   outline: none;
 }
 
+.faq-quick-topics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.faq-quick-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.faq-quick-chip {
+  border: 1px solid #e5ded2;
+  background: #fffaf3;
+  color: #374151;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.faq-quick-chip:hover {
+  border-color: #f59e0b;
+  background: #fff8ec;
+  color: #111827;
+}
+
+.faq-quick-chip.active {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #111827;
+}
+
 .faq-category-list {
   display: flex;
   gap: 10px;
