@@ -57,8 +57,10 @@ function Chat(){
           style={{
             marginTop:"30px",
             padding:"20px",
-            background:"#1f2937",
-            borderRadius:"15px"
+            background:"#fffaf3",
+            border:"1px solid #e5ded2",
+            borderRadius:"15px",
+            color:"#111827"
           }}
         >
           <h2>AI Response</h2>

@@ -55,6 +55,13 @@ function AskQuery(){
           Ask AI Mentor
         </button>
 
+        <button
+          className="secondary-btn ask-feedback-link"
+          onClick={() => navigate("/feedback")}
+        >
+          Send Feedback
+        </button>
+
       </div>
 
     </div>

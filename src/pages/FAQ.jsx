@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./FAQ.css";
 
 function FAQ() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [openIndex, setOpenIndex] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const faqs = [
     {
@@ -53,189 +55,162 @@ function FAQ() {
       category: "Attendance",
       question: "How many hours should I work daily?",
       answer:
-        "Typically 4–6 hours per day depending on project requirements and learning activities.",
+        "Typically 4-6 hours per day depending on project requirements and learning activities.",
     },
   ];
 
-  const filteredFaqs = faqs.filter(
-    (faq) =>
-      faq.question.toLowerCase().includes(search.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(search.toLowerCase()) ||
-      faq.category.toLowerCase().includes(search.toLowerCase())
-  );
+  const categories = ["All", ...new Set(faqs.map((faq) => faq.category))];
+  const quickTopics = [
+    { label: "VINS", search: "VINS", category: "All" },
+    { label: "NOC", search: "", category: "NOC" },
+    { label: "attendance", search: "", category: "Attendance" },
+    { label: "certificates", search: "", category: "Certificate" },
+    { label: "team formation", search: "", category: "Team Formation" },
+    { label: "ViBe", search: "", category: "ViBe" },
+  ];
+
+  const applyQuickTopic = (topic) => {
+    setSearch(topic.search);
+    setSelectedCategory(topic.category);
+    setOpenIndex(null);
+  };
+
+  const filteredFaqs = faqs.filter((faq) => {
+    const keyword = search.toLowerCase();
+    const matchesSearch =
+      faq.question.toLowerCase().includes(keyword) ||
+      faq.answer.toLowerCase().includes(keyword) ||
+      faq.category.toLowerCase().includes(keyword);
+
+    const matchesCategory =
+      selectedCategory === "All" || faq.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px",
-        background:
-          "linear-gradient(135deg,#0f172a,#111827,#1e1b4b)",
-        color: "white",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "30px",
-        }}
-      >
-        <h1 style={{ fontSize: "42px" }}>
-          Student Help Desk
-        </h1>
-
-        <button
-          onClick={() =>
-            window.open(
-              "https://vibe.vicharanashala.ai/student/login?redirect=%2Fstudent%2Fcourse-registration%2F6a055c4c79eef782c2548389",
-              "_blank"
-            )
-          }
-          style={{
-            padding: "12px 25px",
-            border: "none",
-            borderRadius: "12px",
-            background:
-              "linear-gradient(135deg,#8b5cf6,#7c3aed)",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          Vibe Course
-        </button>
-      </div>
-
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="🔍 Search FAQ (NOC, Internship, Certificate...)"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "15px",
-          fontSize: "16px",
-          borderRadius: "12px",
-          border: "1px solid #374151",
-          background: "#1f2937",
-          color: "white",
-          marginBottom: "25px",
-        }}
-      />
-
-      {/* FAQ List */}
-      {filteredFaqs.length > 0 ? (
-        filteredFaqs.map((faq, index) => (
-          <div
-            key={index}
-            style={{
-              background: "#1f2937",
-              marginBottom: "15px",
-              borderRadius: "14px",
-              overflow: "hidden",
-              border: "1px solid #374151",
-            }}
-          >
-            <div
-              onClick={() =>
-                setOpenIndex(
-                  openIndex === index ? null : index
-                )
-              }
-              style={{
-                padding: "18px",
-                cursor: "pointer",
-                fontWeight: "bold",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
+    <div className="faq-page">
+      <main className="faq-main">
+        <header className="faq-header">
+          <div>
+            <button
+              onClick={() => navigate("/welcome")}
+              className="faq-back-button"
             >
-              <span>{faq.question}</span>
-              <span>
-                {openIndex === index ? "−" : "+"}
-              </span>
-            </div>
+              &lt; Back
+            </button>
 
-            {openIndex === index && (
-              <div
-                style={{
-                  padding: "18px",
-                  borderTop: "1px solid #374151",
-                  color: "#d1d5db",
-                }}
-              >
-                <p>
-                  <strong>Category:</strong>{" "}
-                  {faq.category}
-                </p>
+            <p className="faq-tagline">Help desk</p>
 
-                <p>{faq.answer}</p>
-              </div>
-            )}
+            <h1 className="faq-heading">Frequently asked questions</h1>
           </div>
-        ))
-      ) : (
-        <div
-          style={{
-            background: "#1f2937",
-            padding: "30px",
-            borderRadius: "15px",
-            textAlign: "center",
-          }}
-        >
-          <h2>No FAQ Found</h2>
+        </header>
 
-          <p>
-            We couldn't find a matching answer.
-            Please ask your question directly.
-          </p>
-
-          <button
-            onClick={() => navigate("/ask")}
-            style={{
-              marginTop: "20px",
-              padding: "12px 24px",
-              border: "none",
-              borderRadius: "10px",
-              background:
-                "linear-gradient(135deg,#8b5cf6,#7c3aed)",
-              color: "white",
-              cursor: "pointer",
+        <section className="faq-search-card">
+          <input
+            type="text"
+            placeholder="Search FAQ by topic, keyword, or category"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setOpenIndex(null);
             }}
-          >
-            Ask Your Question
-          </button>
-        </div>
-      )}
+            className="faq-search-input"
+          />
 
-      {/* Bottom Button */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "40px",
-        }}
-      >
-        <button
-          onClick={() => navigate("/ask")}
-          style={{
-            padding: "15px 35px",
-            fontSize: "18px",
-            border: "none",
-            borderRadius: "12px",
-            background:
-              "linear-gradient(135deg,#8b5cf6,#7c3aed)",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          Ask New Question →
-        </button>
-      </div>
+          <div className="faq-category-list">
+            {categories.map((category) => {
+              const active = selectedCategory === category;
+
+              return (
+                <button
+                  key={category}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                    setOpenIndex(null);
+                  }}
+                  className={`faq-category-button${active ? " active" : ""}`}
+                >
+                  {category}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section>
+          {filteredFaqs.length > 0 ? (
+            filteredFaqs.map((faq, index) => (
+              <article
+                key={`${faq.category}-${faq.question}`}
+                className={`faq-accordion${openIndex === index ? " open" : ""}`}
+              >
+                <button
+                  onClick={() =>
+                    setOpenIndex(openIndex === index ? null : index)
+                  }
+                  className="faq-accordion-toggle"
+                >
+                  <span>
+                    <span className="faq-question">
+                      {faq.question}
+                    </span>
+                  </span>
+
+                  <span
+                    className={`faq-toggle-icon${openIndex === index ? " open" : ""}`}
+                  >
+                    {openIndex === index ? "-" : "+"}
+                  </span>
+                </button>
+
+                {openIndex === index && (
+                  <div className="faq-answer">
+                    <p className="faq-answer-text">{faq.answer}</p>
+                  </div>
+                )}
+              </article>
+            ))
+          ) : (
+            <div className="faq-empty-state">
+              <h2 className="faq-empty-heading">No matching FAQ found</h2>
+
+              <p className="faq-empty-copy">
+                Try a different keyword or use Query support directly if this is
+                a specific case.
+              </p>
+
+              <button
+                onClick={() => navigate("/ask")}
+                className="faq-empty-button"
+              >
+                Query support
+              </button>
+            </div>
+          )}
+        </section>
+
+        <section className="faq-cta">
+          <h2 className="faq-cta-heading">Still stuck?</h2>
+          <p className="faq-cta-copy">
+            If the FAQ does not cover your situation, send your question to Query support or leave feedback.
+          </p>
+          <div className="faq-cta-actions">
+            <button
+              onClick={() => navigate("/ask")}
+              className="faq-cta-button"
+            >
+              Query support
+            </button>
+            <button
+              onClick={() => navigate("/feedback")}
+              className="faq-secondary-button"
+            >
+              Feedback
+            </button>
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
